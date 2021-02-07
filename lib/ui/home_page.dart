@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:giphy/ui/gif_page.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -23,16 +24,6 @@ class _HomePageState extends State<HomePage> {
           "https://api.giphy.com/v1/gifs/search?api_key=XNxg3iI8kGZkA5BPERDvNajvpGUj9zP0&q=$_search&limit=19&offset=$_offset&rating=g&lang=pt");
 
     return json.decode(response.body);
-  }
-
-//Retorno API
-  @override
-  void initState() {
-    super.initState();
-
-    _getGifs().then((map) {
-      print(map);
-    });
   }
 
   @override
@@ -59,6 +50,7 @@ class _HomePageState extends State<HomePage> {
                 onSubmitted: (text) {
                   setState(() {
                     _search = text;
+                    _offset = 0;
                   });
                 },
               )),
@@ -112,6 +104,11 @@ class _HomePageState extends State<HomePage> {
                 height: 300.0,
                 fit: BoxFit.cover,
               ),
+              onTap: (){
+                Navigator.push(context, 
+                MaterialPageRoute(builder: (context) => GifPage(snapshot.data["data"][index]))
+                );
+              },
             );
           } else {
             return Container(
